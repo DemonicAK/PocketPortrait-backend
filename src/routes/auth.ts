@@ -21,12 +21,6 @@ router.post('/register', async (req: Request<{}, AuthResponse, AuthRequest>, res
     const user = new User({ email, username, password });
     await user.save();
 
-    // Generate token
-    // const token = jwt.sign(
-    //   { userId: user._id, email: user.email },
-    //   process.env.JWT_SECRET || 'fallback-secret',
-    //   { expiresIn: process.env.JWT_EXPIRES_IN || '7d' }
-    // );
     const token = jwt.sign(
       { userId: user._id, email: user.email },
       process.env.JWT_SECRET || 'fallback-secret',

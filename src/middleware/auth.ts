@@ -30,6 +30,7 @@ export const authenticateToken = async (req: AuthRequest, res: Response, next: N
     }
 
     req.user = user;
+    // console.log("user id :", decoded.userId)
     next();
   } catch (error) {
     res.status(403).json({ message: 'Invalid or expired token' });
