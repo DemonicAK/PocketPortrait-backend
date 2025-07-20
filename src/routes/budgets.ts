@@ -1,12 +1,12 @@
 import express, { Request, Response } from 'express';
 import Budget from '../models/Budget';
 import { authenticateToken } from '../middleware/auth';
-
+import { AuthRequest } from '../types';
 const router = express.Router();
 
-interface AuthRequest extends Request {
-  user?: any;
-}
+// interface AuthRequest extends Request {
+//   user?: any;
+// }
 
 // Get budgets for current month
 router.get('/', authenticateToken, async (req: AuthRequest, res: Response): Promise<void> => {

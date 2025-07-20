@@ -3,12 +3,12 @@ import Transaction from '../models/Transaction';
 import Budget from '../models/Budget';
 import { authenticateToken } from '../middleware/auth';
 import { DashboardStats } from '../types';
-
+import { AuthRequest } from '../types';
 const router = express.Router();
 
-interface AuthRequest extends Request {
-  user?: any;
-}
+// interface AuthRequest extends Request {
+//   user?: any;
+// }
 
 // Get all Transactions for user
 router.get('/', authenticateToken, async (req: AuthRequest, res: Response): Promise<void> => {
