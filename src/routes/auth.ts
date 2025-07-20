@@ -39,7 +39,7 @@ router.post('/register', async (req: Request<{}, AuthResponse, AuthRequest>, res
     res.cookie('isLoggedIn', 'true', {
   httpOnly: false, // Middleware and JS can see this
   secure: process.env.NODE_ENV === 'production',
-  sameSite: 'lax',
+  sameSite: 'none',
   maxAge: 7 * 24 * 60 * 60 * 1000
 });
 
@@ -88,14 +88,14 @@ router.post('/login', async (req: Request<{}, AuthResponse, AuthRequest>, res: R
     res.cookie('authToken', token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production', // Only secure in production
-      sameSite: 'lax', // Changed from 'strict' for better compatibility
+      sameSite: 'none', // Changed from 'strict' for better compatibility
       maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days to match JWT expiration
       path: '/' // Ensure cookie is accessible across the app
     });
     res.cookie('isLoggedIn', 'true', {
   httpOnly: false, // Middleware and JS can see this
   secure: process.env.NODE_ENV === 'production',
-  sameSite: 'lax',
+  sameSite: 'none',
   maxAge: 7 * 24 * 60 * 60 * 1000
 });
 
@@ -116,13 +116,13 @@ router.post('/logout', (req: Request, res: Response): void => {
   res.clearCookie('authToken', {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
-    sameSite: 'lax',
+    sameSite: 'none',
     path: '/' // Ensure cookie is cleared across the app
   });
 res.clearCookie('isLoggedIn', {
     httpOnly: false, // Allow JS to clear this cookie
     secure: process.env.NODE_ENV === 'production',
-    sameSite: 'lax',
+    sameSite: 'none',
     path: '/' // Ensure cookie is cleared across the app
   });
   res.json({ message: 'Logged out successfully' });
