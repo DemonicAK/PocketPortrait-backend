@@ -1,4 +1,5 @@
 import { Document, ObjectId } from 'mongoose';
+import { Request } from 'express';
 
 // MongoDB Interfaces
 export interface IUser extends Document {
@@ -68,11 +69,11 @@ export interface UserSummary {
 }
 
 // API Interfaces
-export interface AuthRequest {
-  email: string;
-  username?: string;
-  password: string;
-}
+// export interface AuthPayload {
+//   email: string;
+//   username?: string;
+//   password: string;
+// }
 
 export interface AuthResponse {
   token: string;
@@ -81,6 +82,17 @@ export interface AuthResponse {
     email: string;
     username: string;
   };
+}
+
+export interface AuthRequest extends Request {
+    email: string;
+  username?: string;
+  password: string;
+  user?: any;
+  cookies: Record<string, any>;
+  body: any;
+  params: any;
+  query: any;
 }
 
 // export interface DashboardStats {

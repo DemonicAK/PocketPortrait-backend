@@ -16,8 +16,6 @@
 
     "noImplicitAny": false,       // ← allows `any` where type is missing
     // "suppressImplicitAnyIndexErrors": true,
-
-   
     },
     "include": ["src/**/*"],
     "exclude": ["node_modules", "dist"]
