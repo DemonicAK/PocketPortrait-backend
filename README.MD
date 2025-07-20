@@ -1,11 +1,11 @@
 # Pocket Portrait - Backend
 
-A backend service for a finance tracking application that provides APIs for expense management, budget tracking, and user authentication.
+A backend service for a finance tracking application that provides APIs for Transaction management, budget tracking, and user authentication.
 
 ## Features
 
 - User authentication and authorization (JWT)
-- Expense tracking and management
+- Transaction tracking and management
 - Budget creation and monitoring
 - Dashboard analytics and reports
 - MongoDB integration for primary data
@@ -82,13 +82,13 @@ npm run type-check
 - `POST /api/auth/register` - User registration
 - `POST /api/auth/login` - User login
 
-### Expenses
-- `GET /api/expenses` - Get all expenses for user
-- `GET /api/expenses/transactions` - Get paginated expenses with filters
-- `POST /api/expenses` - Create new expense
-- `PUT /api/expenses/:id` - Update expense
-- `DELETE /api/expenses/:id` - Delete expense
-- `GET /api/expenses/dashboard` - Get dashboard statistics
+### Transactions
+- `GET /api/transactions` - Get all Transactions for user
+<!-- - `GET /api/transactions/transactions` - Get paginated Transactions with filters -->
+- `POST /api/transactions` - Create new Transaction
+- `PUT /api/transactions/:id` - Update Transaction
+- `DELETE /api/transactions/:id` - Delete Transaction
+- `GET /api/transactions/dashboard` - Get dashboard statistics
 
 ### Budgets
 - `GET /api/budgets` - Get budgets for current month
@@ -102,7 +102,7 @@ npm run type-check
 
 ### MongoDB Collections
 - **Users**: User authentication data
-- **Expenses**: Transaction records
+- **Transactions**: Transaction records
 - **Budgets**: Budget limits and tracking
 
 ### PostgreSQL Tables (Supabase)
@@ -121,11 +121,11 @@ backend/
 │   │   └── auth.ts
 │   ├── models/
 │   │   ├── User.ts
-│   │   ├── Expense.ts
+│   │   ├── Transaction.ts
 │   │   └── Budget.ts
 │   ├── routes/
 │   │   ├── auth.ts
-│   │   ├── expenses.ts
+│   │   ├── Transactions.ts
 │   │   └── budgets.ts
 │   ├── types/
 │   │   └── index.ts
@@ -173,17 +173,7 @@ Authorization: Bearer <your-jwt-token>
 1. **MongoDB**: Create a MongoDB Atlas cluster or use local MongoDB
 2. **Supabase**: Create a new Supabase project for PostgreSQL
 3. **JWT Secret**: Generate a secure random string for JWT signing
-
-## Error Handling
-
-The API returns standard HTTP status codes:
-- `200` - Success
-- `201` - Created
-- `400` - Bad Request
-- `401` - Unauthorized
-- `403` - Forbidden
-- `404` - Not Found
-- `500` - Internal Server Error
+4. **CORS**: Ensure your frontend URL is set in the `.env` file for CORS configuration
 
 ## Contributing
 

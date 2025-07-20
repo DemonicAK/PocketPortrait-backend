@@ -3,10 +3,11 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import connectMongoDB from './config/mongodb';
 import { initializeDatabase } from './config/postgres';
+import cookieParser from 'cookie-parser'; 
 
 // Routes
 import authRoutes from './routes/auth';
-import expenseRoutes from './routes/expenses';
+import transactionRoutes from './routes/transactions';
 import budgetRoutes from './routes/budgets';
 
 // Load environment variables
@@ -14,46 +15,44 @@ dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 5000;
-console.log(1);
+// console.log(1);
 // Middleware
+app.use(cookieParser());
 app.use(cors({
   origin: process.env.FRONTEND_URL || 'http://localhost:3000',
   credentials: true
 }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-console.log(2);
+// console.log(2);
 
 // Routes
 app.use('/api/auth', authRoutes);
-app.use('/api/expenses', expenseRoutes);
+app.use('/api/transactions', transactionRoutes);
 app.use('/api/budgets', budgetRoutes);
-console.log(3);
+// console.log(3);
 
 // Health check
 app.get('/health', (req, res) => {
   res.json({ status: 'OK', timestamp: new Date().toISOString() });
 });
-console.log(4);
+// console.log(4);
 
 // Error handling middleware
 app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
   console.error(err.stack);
   res.status(500).json({ message: 'Something went wrong!' });
 });
-console.log(5);
+// console.log(5);
 
-// // 404 handler
-// app.use('*', (req, res) => {
-//   res.status(404).json({ message: 'Route not found' });
-// });
-console.log(6);
+
+// console.log(6);
 
 // Start server
 const startServer = async (): Promise<void> => {
   try {
     // Connect to databases
-    console.log('somewhere we are here start server');
+    // console.log('somewhere we are here start server');
     await connectMongoDB();
     await initializeDatabase();
     

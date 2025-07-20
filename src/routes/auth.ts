@@ -28,6 +28,13 @@ router.post('/register', async (req: Request<{}, AuthResponse, AuthRequest>, res
         expiresIn: process.env.JWT_EXPIRES_IN || '7d'
       } as jwt.SignOptions
     );
+        // Set JWT in httpOnly cookie with proper settings
+    res.cookie('authToken', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production', // Only secure in production
+      sameSite: 'lax', // Changed from 'strict' for better compatibility
+      maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days to match JWT expiration
+    });
     res.status(201).json({
       token,
       user: {
@@ -60,12 +67,7 @@ router.post('/login', async (req: Request<{}, AuthResponse, AuthRequest>, res: R
       return;
     }
 
-    // Generate token
-    // const token = jwt.sign(
-    //   { userId: user._id, email: user.email },
-    //   process.env.JWT_SECRET || 'fallback-secret',
-    //   { expiresIn: process.env.JWT_EXPIRES_IN || '7d' }
-    // );
+ 
   
     const token = jwt.sign(
       { userId: user._id, email: user.email },
@@ -74,9 +76,15 @@ router.post('/login', async (req: Request<{}, AuthResponse, AuthRequest>, res: R
         expiresIn: process.env.JWT_EXPIRES_IN || '7d'
       } as jwt.SignOptions
     );
-
+    // Set JWT in httpOnly cookie with proper settings
+    res.cookie('authToken', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production', // Only secure in production
+      sameSite: 'lax', // Changed from 'strict' for better compatibility
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days to match JWT expiration
+      path: '/' // Ensure cookie is accessible across the app
+    });
     res.json({
-      token,
       user: {
         id: user._id.toString(),
         email: user.email,
@@ -86,6 +94,17 @@ router.post('/login', async (req: Request<{}, AuthResponse, AuthRequest>, res: R
   } catch (error: any) {
     res.status(500).json({ message: error.message });
   }
+});
+
+
+router.post('/logout', (req: Request, res: Response): void => {
+  res.clearCookie('authToken', {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'lax',
+    path: '/' // Ensure cookie is cleared across the app
+  });
+  res.json({ message: 'Logged out successfully' });
 });
 
 export default router;

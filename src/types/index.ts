@@ -10,16 +10,25 @@ export interface IUser extends Document {
   updatedAt: Date;
 }
 
-export interface IExpense extends Document {
+
+export interface ITransaction extends Document {
   _id: ObjectId;
   userId: ObjectId;
   amount: number;
-  category: string;
+  from?: string;
+  to?: string;
   date: Date;
   paymentMethod: string;
-  notes?: string;
   createdAt: Date;
   updatedAt: Date;
+  secondpartyId?: ObjectId;
+  category: string;
+  notes?: string;
+  type?: 'expense' | 'income';
+  tags?: string[];
+  recurring?: boolean;
+  frequency?: 'daily' | 'weekly' | 'monthly' | 'yearly';
+  secondpartyType?: 'individual' | 'business';
 }
 
 export interface IBudget extends Document {
@@ -74,10 +83,46 @@ export interface AuthResponse {
   };
 }
 
+// export interface DashboardStats {
+//   totalSpent: number;
+//   topCategory: string;
+//   topPaymentMethods: string[];
+//   categoryData: { [key: string]: number };
+//   monthlyData: { month: string; amount: number }[];
+// }
+
 export interface DashboardStats {
+  // Financial Summary
   totalSpent: number;
-  topCategory: string;
+  totalIncome: number;
+  netAmount: number;
+  savingsRate: number;
+  
+  // Category Analysis
+  topCategory: string; // Top expense category (for backward compatibility)
+  topExpenseCategory: string;
+  topIncomeCategory: string;
+  categoryData: { [key: string]: number }; // Expense categories (for backward compatibility)
+  expenseCategoryData: { [key: string]: number };
+  incomeCategoryData: { [key: string]: number };
+  
+  // Payment Methods
   topPaymentMethods: string[];
-  categoryData: { [key: string]: number };
-  monthlyData: { month: string; amount: number }[];
+  paymentMethodData: { [key: string]: number };
+  
+  // Historical Data
+  monthlyData: { 
+    month: string; 
+    amount: number; // Expense amount (for backward compatibility)
+    expenses: number;
+    income: number;
+    net: number;
+  }[];
+  
+  // Transaction Insights
+  totalTransactions: number;
+  expenseCount: number;
+  incomeCount: number;
+  avgExpense: number;
+  avgIncome: number;
 }

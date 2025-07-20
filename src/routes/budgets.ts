@@ -14,10 +14,11 @@ router.get('/', authenticateToken, async (req: AuthRequest, res: Response): Prom
     const currentMonth = new Date().toISOString().slice(0, 7);
     
     const budgets = await Budget.find({
-      userId: req.user._id,
-      month: currentMonth
+      userId: req.user.userId,
+      month: currentMonth,
+      limitAmount: { $exists: true }
     });
-
+    // console.log('Fetched budgets:', budgets);  // Debugging line to check fetched budgets
     res.json(budgets);
   } catch (error: any) {
     res.status(500).json({ message: error.message });
@@ -33,7 +34,7 @@ router.post('/', authenticateToken, async (req: AuthRequest, res: Response): Pro
 
     const budget = await Budget.findOneAndUpdate(
       {
-        userId: req.user._id,
+        userId: req.user.userId,
         category,
         month: currentMonth
       },
@@ -59,7 +60,7 @@ router.get('/alerts', authenticateToken, async (req: AuthRequest, res: Response)
     const currentMonth = new Date().toISOString().slice(0, 7);
     
     const budgets = await Budget.find({
-      userId: req.user._id,
+      userId: req.user.userId,
       month: currentMonth
     });
 
@@ -73,6 +74,8 @@ router.get('/alerts', authenticateToken, async (req: AuthRequest, res: Response)
       limit: budget.limitAmount,
       severity: budget.currentSpent >= budget.limitAmount ? 'high' : 'medium'
     }));
+
+    // console.log('Budget alerts:', alerts);  
 
     res.json(alerts);
   } catch (error: any) {
