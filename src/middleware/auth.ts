@@ -1,16 +1,16 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
-import User from '../models/User';
+// import User from '../models/User';
 
 // interface AuthRequest extends Request {
 //   user?: any;
 // }
 import { AuthRequest } from '../types';
 
-interface JwtPayload {
-  userId: string;
-  email: string;
-}
+// interface JwtPayload {
+//   userId: string;
+//   email: string;
+// }
 
 
 export const authenticateToken = (req: AuthRequest, res: Response, next: NextFunction): void => {

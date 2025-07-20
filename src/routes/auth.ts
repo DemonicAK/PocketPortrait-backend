@@ -32,9 +32,17 @@ router.post('/register', async (req: Request<{}, AuthResponse, AuthRequest>, res
     res.cookie('authToken', token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production', // Only secure in production
-      sameSite: 'lax', // Changed from 'strict' for better compatibility
+      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax', // Changed from 'strict' for better compatibility
+      path: '/',
       maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days to match JWT expiration
     });
+    res.cookie('isLoggedIn', 'true', {
+  httpOnly: false, // Middleware and JS can see this
+  secure: process.env.NODE_ENV === 'production',
+  sameSite: 'lax',
+  maxAge: 7 * 24 * 60 * 60 * 1000
+});
+
     res.status(201).json({
       token,
       user: {
@@ -80,10 +88,17 @@ router.post('/login', async (req: Request<{}, AuthResponse, AuthRequest>, res: R
     res.cookie('authToken', token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production', // Only secure in production
-      sameSite: "none", // Changed from 'strict' for better compatibility
+      sameSite: 'lax', // Changed from 'strict' for better compatibility
       maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days to match JWT expiration
       path: '/' // Ensure cookie is accessible across the app
     });
+    res.cookie('isLoggedIn', 'true', {
+  httpOnly: false, // Middleware and JS can see this
+  secure: process.env.NODE_ENV === 'production',
+  sameSite: 'lax',
+  maxAge: 7 * 24 * 60 * 60 * 1000
+});
+
     res.json({
       user: {
         id: user._id.toString(),
@@ -100,6 +115,12 @@ router.post('/login', async (req: Request<{}, AuthResponse, AuthRequest>, res: R
 router.post('/logout', (req: Request, res: Response): void => {
   res.clearCookie('authToken', {
     httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'lax',
+    path: '/' // Ensure cookie is cleared across the app
+  });
+res.clearCookie('isLoggedIn', {
+    httpOnly: false, // Allow JS to clear this cookie
     secure: process.env.NODE_ENV === 'production',
     sameSite: 'lax',
     path: '/' // Ensure cookie is cleared across the app
