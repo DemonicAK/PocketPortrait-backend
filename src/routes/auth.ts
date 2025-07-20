@@ -34,12 +34,14 @@ router.post('/register', async (req: Request<{}, AuthResponse, AuthRequest>, res
       secure: process.env.NODE_ENV === 'production', // Only secure in production
       sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax', // Changed from 'strict' for better compatibility
       path: '/',
-      maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days to match JWT expiration
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days to match JWT expiration
+        domain: '.arijitkar.com',  // 👈 KEY: Allow cookie for all subdomains
     });
     res.cookie('isLoggedIn', 'true', {
   httpOnly: false, // Middleware and JS can see this
   secure: process.env.NODE_ENV === 'production',
   sameSite: 'none',
+  domain: '.arijitkar.com',  // 👈 KEY: Allow cookie for all subdomains
   maxAge: 7 * 24 * 60 * 60 * 1000
 });
 
@@ -90,13 +92,15 @@ router.post('/login', async (req: Request<{}, AuthResponse, AuthRequest>, res: R
       secure: process.env.NODE_ENV === 'production', // Only secure in production
       sameSite: 'none', // Changed from 'strict' for better compatibility
       maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days to match JWT expiration
-      path: '/' // Ensure cookie is accessible across the app
+      path: '/', // Ensure cookie is accessible across the app
+        domain: '.arijitkar.com',  // 👈 KEY: Allow cookie for all subdomains
     });
     res.cookie('isLoggedIn', 'true', {
   httpOnly: false, // Middleware and JS can see this
   secure: process.env.NODE_ENV === 'production',
   sameSite: 'none',
-  maxAge: 7 * 24 * 60 * 60 * 1000
+  maxAge: 7 * 24 * 60 * 60 * 1000,
+    domain: '.arijitkar.com',  // 👈 KEY: Allow cookie for all subdomains
 });
 
     res.json({
@@ -117,12 +121,14 @@ router.post('/logout', (req: Request, res: Response): void => {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
     sameSite: 'none',
-    path: '/' // Ensure cookie is cleared across the app
+    path: '/', // Ensure cookie is cleared across the app
+    domain: '.arijitkar.com'  // 👈 KEY: Allow cookie for all subdomains
   });
 res.clearCookie('isLoggedIn', {
     httpOnly: false, // Allow JS to clear this cookie
     secure: process.env.NODE_ENV === 'production',
     sameSite: 'none',
+    domain: '.arijitkar.com',  // 👈 KEY: Allow cookie for all subdomains
     path: '/' // Ensure cookie is cleared across the app
   });
   res.json({ message: 'Logged out successfully' });
