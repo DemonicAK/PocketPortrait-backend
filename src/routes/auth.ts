@@ -107,4 +107,31 @@ router.post('/logout', (req: Request, res: Response): void => {
   res.json({ message: 'Logged out successfully' });
 });
 
+router.get('/me', async (req: Request, res: Response): Promise<void> => {
+  try {
+    const token = req.cookies.authToken;
+    if (!token) {
+      res.status(401).json({ message: 'Unauthorized' });
+      return;
+    }
+
+    const decoded = jwt.verify(token, process.env.JWT_SECRET || 'fallback-secret') as jwt.JwtPayload;
+    const user = await User.findById(decoded.userId);
+    if (!user) {
+      res.status(404).json({ message: 'User not found' });
+      return;
+    }
+
+    res.json({
+      user: {
+        id: user._id.toString(),
+        email: user.email,
+        username: user.username
+      }
+    });
+  } catch (error: any) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
 export default router;

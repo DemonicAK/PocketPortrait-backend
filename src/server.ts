@@ -30,7 +30,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/api/auth', authRoutes);
 app.use('/api/transactions', transactionRoutes);
 app.use('/api/budgets', budgetRoutes);
-// console.log(3);
+
 
 // Health check
 app.get('/health', (req, res) => {
