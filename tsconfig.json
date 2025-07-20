@@ -13,8 +13,7 @@
       "declaration": true,
       "declarationMap": true,
       "sourceMap": true,
-      // "moduleResolution": "node",             
-      // "types": ["node", "./src/types"]  
+
     "noImplicitAny": false,       // ← allows `any` where type is missing
     // "suppressImplicitAnyIndexErrors": true,
 
