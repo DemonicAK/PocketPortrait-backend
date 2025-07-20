@@ -80,7 +80,7 @@ router.post('/login', async (req: Request<{}, AuthResponse, AuthRequest>, res: R
     res.cookie('authToken', token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production', // Only secure in production
-      sameSite: 'lax', // Changed from 'strict' for better compatibility
+      sameSite: "none", // Changed from 'strict' for better compatibility
       maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days to match JWT expiration
       path: '/' // Ensure cookie is accessible across the app
     });
